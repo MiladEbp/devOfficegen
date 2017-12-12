@@ -22,7 +22,7 @@ describe('devOfficegen', function(){
                         if (err) {
                             fail(err);
                         } else {
-                            let splited = result.toString().split('|');
+                            let splited = result.toString().split('\r\n|');
                             counter++;
                             next(counter,splited);
                         }//else

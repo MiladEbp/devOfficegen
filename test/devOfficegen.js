@@ -20,7 +20,7 @@ describe('devOfficegen', function () {
                                 assert_1.fail(err);
                             }
                             else {
-                                var splited = result.toString().split('|');
+                                var splited = result.toString().split('\r\n|');
                                 counter_1++;
                                 next(counter_1, splited);
                             }
