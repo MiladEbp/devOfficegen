@@ -5,7 +5,7 @@ var fs_1 = require("fs");
 var Archive = require("archiver");
 var xmlbuild = require("xmlbuilder");
 describe('devOfficegen', function () {
-    it('create table merge column', function (done) {
+    it('create table merge row', function (done) {
         var xmlBody = xmlbuild.create('w:document', { encoding: 'utf-8', standalone: 'yes' })
             .att('xmlns:wpc', 'http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas')
             .att('xmlns:cx', 'http://schemas.microsoft.com/office/drawing/2014/chartex')
@@ -41,21 +41,11 @@ describe('devOfficegen', function () {
             .ele('w:tc')
             .ele('w:tcPr')
             .ele('w:tcW', { 'w:w': '4675', 'w:type': 'dxa' }).up()
-            .ele('w:vMerge', { 'w:val': 'restart' }).up()
+            .ele('w:gridSpan', { 'w:val': '2' }).up()
             .up()
             .ele('w:p')
             .ele('w:r')
             .ele('w:t', 'milad').up()
-            .up()
-            .up()
-            .up()
-            .ele('w:tc')
-            .ele('w:tcPr')
-            .ele('w:tcW', { 'w:w': '4675', 'w:type': 'dxa' }).up()
-            .up()
-            .ele('w:p')
-            .ele('w:r')
-            .ele('w:t', 'reza').up()
             .up()
             .up()
             .up()
@@ -64,7 +54,6 @@ describe('devOfficegen', function () {
             .ele('w:tc')
             .ele('w:tcPr')
             .ele('w:tcW', { 'w:w': '4675', 'w:type': 'dxa' }).up()
-            .ele('w:vMerge').up()
             .up()
             .ele('w:p')
             .ele('w:r')
@@ -113,11 +102,11 @@ describe('devOfficegen', function () {
             });
         }
         var filePath = "outTest/xmlToString.docx";
-        var dirPath = 'xmlToString/';
         var archive = Archive.create('zip');
         var out = fs_1.createWriteStream(filePath);
         archive.pipe(out);
         var i = 1;
+        var dirPath = 'xmlToString/';
         addResurce(dirPath, function (counter, result) {
             if (i == counter) {
                 archive.append(result[0], { name: result[1] });
