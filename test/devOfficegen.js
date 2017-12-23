@@ -5,8 +5,8 @@ var fs_1 = require("fs");
 var Archive = require("archiver");
 var xmlbuild = require("xmlbuilder");
 describe('devOfficegen', function () {
-    it('orginal table', function (done) {
-        var xml = xmlbuild.create('w:document', { encoding: 'utf-8', standalone: 'yes' })
+    it('create table merge column', function (done) {
+        var xmlBody = xmlbuild.create('w:document', { encoding: 'utf-8', standalone: 'yes' })
             .att('xmlns:wpc', 'http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas')
             .att('xmlns:cx', 'http://schemas.microsoft.com/office/drawing/2014/chartex')
             .att('xmlns:mc', 'http://schemas.openxmlformats.org/markup-compatibility/2006')
@@ -41,6 +41,7 @@ describe('devOfficegen', function () {
             .ele('w:tc')
             .ele('w:tcPr')
             .ele('w:tcW', { 'w:w': '4675', 'w:type': 'dxa' }).up()
+            .ele('w:vMerge', { 'w:val': 'restart' }).up()
             .up()
             .ele('w:p')
             .ele('w:r')
@@ -56,14 +57,38 @@ describe('devOfficegen', function () {
             .ele('w:r')
             .ele('w:t', 'reza').up()
             .up()
+            .up()
+            .up()
+            .up()
+            .ele('w:tr')
+            .ele('w:tc')
+            .ele('w:tcPr')
+            .ele('w:tcW', { 'w:w': '4675', 'w:type': 'dxa' }).up()
+            .ele('w:vMerge').up()
+            .up()
+            .ele('w:p')
+            .ele('w:r')
+            .ele('w:t', 'milad').up()
+            .up()
+            .up()
+            .up()
+            .ele('w:tc')
+            .ele('w:tcPr')
+            .ele('w:tcW', { 'w:w': '4675', 'w:type': 'dxa' }).up()
+            .up()
+            .ele('w:p')
+            .ele('w:r')
+            .ele('w:t', 'reza').up()
+            .up()
+            .up()
+            .up()
+            .up()
             .end({
             indent: '  ',
             newline: '\n',
             allowEmpty: false,
             spacebeforeslash: ''
         });
-        var pathWrite = 'xmlToString/newj.txt';
-        var dirPath = 'xmlToString/';
         function addResurce(dirPath, next) {
             fs_1.readdir(dirPath, function (err, files) {
                 if (err) {
@@ -88,6 +113,7 @@ describe('devOfficegen', function () {
             });
         }
         var filePath = "outTest/xmlToString.docx";
+        var dirPath = 'xmlToString/';
         var archive = Archive.create('zip');
         var out = fs_1.createWriteStream(filePath);
         archive.pipe(out);
