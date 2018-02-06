@@ -1,12 +1,9 @@
 "use strict";
 exports.__esModule = true;
-var assert_1 = require("assert");
-var fs_1 = require("fs");
-var Archive = require("archiver");
 var xmlbuild = require("xmlbuilder");
 describe('devOfficegen', function () {
-    it('create table merge row', function (done) {
-        var xmlBody = xmlbuild.create('w:document', { encoding: 'utf-8', standalone: 'yes' })
+    it('orginal table', function (done) {
+        var xml = xmlbuild.create('w:document', { encoding: 'utf-8', standalone: 'yes' })
             .att('xmlns:wpc', 'http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas')
             .att('xmlns:cx', 'http://schemas.microsoft.com/office/drawing/2014/chartex')
             .att('xmlns:mc', 'http://schemas.openxmlformats.org/markup-compatibility/2006')
@@ -41,19 +38,6 @@ describe('devOfficegen', function () {
             .ele('w:tc')
             .ele('w:tcPr')
             .ele('w:tcW', { 'w:w': '4675', 'w:type': 'dxa' }).up()
-            .ele('w:gridSpan', { 'w:val': '2' }).up()
-            .up()
-            .ele('w:p')
-            .ele('w:r')
-            .ele('w:t', 'milad').up()
-            .up()
-            .up()
-            .up()
-            .up()
-            .ele('w:tr')
-            .ele('w:tc')
-            .ele('w:tcPr')
-            .ele('w:tcW', { 'w:w': '4675', 'w:type': 'dxa' }).up()
             .up()
             .ele('w:p')
             .ele('w:r')
@@ -72,50 +56,12 @@ describe('devOfficegen', function () {
             .up()
             .up()
             .up()
+            .up()
             .end({
             indent: '  ',
             newline: '\n',
             allowEmpty: false,
             spacebeforeslash: ''
-        });
-        function addResurce(dirPath, next) {
-            fs_1.readdir(dirPath, function (err, files) {
-                if (err) {
-                    assert_1.fail(err);
-                }
-                else {
-                    var counter_1 = 0;
-                    files.forEach(function (filename) {
-                        var path = dirPath + filename;
-                        fs_1.readFile(path, 'utf8', function (err, result) {
-                            if (err) {
-                                assert_1.fail(err);
-                            }
-                            else {
-                                var splited = result.toString().split('|');
-                                counter_1++;
-                                next(counter_1, splited);
-                            }
-                        });
-                    });
-                }
-            });
-        }
-        var filePath = "outTest/xmlToString.docx";
-        var archive = Archive.create('zip');
-        var out = fs_1.createWriteStream(filePath);
-        archive.pipe(out);
-        var i = 1;
-        var dirPath = 'xmlToString/';
-        addResurce(dirPath, function (counter, result) {
-            if (i == counter) {
-                archive.append(result[0], { name: result[1] });
-                i++;
-                if (i == 13) {
-                    archive.finalize();
-                    done();
-                }
-            }
         });
     });
 });
