@@ -16,16 +16,24 @@ let _ = require('lodash');
 
      export  class createTableProperty {
 
-            constructor(col:any ,row:any,data:any ,next:any){
-                this.createRow(col, row, data, function(result:any){
-                   next(result.end({ indent: ' ', newline: '\n',allowEmpty: false, spacebeforeslash:''}))
+            constructor(col:any ,row:any,data:any,flag:any,next:any){
+                if( flag == 1){
+                    this.createRow(col, row, data,function(result:any){
+                        next(result.end({ pretty:true}))
 
-                });
+                    });// createRow
+                }else if(flag == 2){
+                    this.createRow(col, row, data,function(result:any){
+                        next(result.end({ indent: ' ', newline: '\n',allowEmpty: false, spacebeforeslash:''}))
+
+                    });// createRow
+                }// elseif
+
 
             }// End of constructor
 
 
-       
+
              createRow(col:any, row:any,data:any ,next:any){
                 let i = 0;
                 let xmlBody = xmlbuild.create('w:tbl');
@@ -45,37 +53,37 @@ let _ = require('lodash');
 
             createCol(col:any,data:any,i:any,xmlTr:any){
                  let j=0;
+
+
                  for(j; j<col; j++){
                      this.createP(xmlTr,i,j,data)
-                 }
+                 }// for loop
 
             }// function for create Row in table
-
+                                        /*****    xmltcPr.ele('w:gridSpan', {'w:val':'2'}).up() ****/
 
 
             createP(xmlTr:any,i:any,j:any,data:any){
                 //let i = 0;
+
                     let xmlTc = xmlTr.ele('w:tc')
-                        let xmltcPr = xmlTc.ele('w:tcPr')
-                            xmltcPr.ele('w:tcW',{'w:w':'4675', 'w:type':'dxa'}).up()
-                        xmltcPr.up()
-                        let xmlP = xmlTc.ele('w:p')
-                        let findValue = _.find(data, {x:i,y:j});
-                            let check = findValue.value
-                            if(check == ''){
-                                xmlP.up()
-                            }else {
-                                let xmlR = xmlP.ele('w:r')
-                                    let xmlT = xmlR.ele({'w:t':check}).up();
-                                xmlR.up()
-                                xmlP.up()
-                            }
-                          // let xmlR = xmlP.ele('w:r')
-                            // for(i; i<data.length; i++ ){
-                            //     xmlR.ele({'w:tr':data[i]}).up()
-                            // }
-                        //xmlR.up()
+                    let xmltcPr = xmlTc.ele('w:tcPr')
+                    xmltcPr.ele('w:tcW',{'w:w':'4675', 'w:type':'dxa'}).up()
+                    xmltcPr.up()
+                    let xmlP = xmlTc.ele('w:p')
+                    let findValue = _.find(data, {x:i,y:j});
+                    let check = findValue.value;
+                    if(check == ''){
+                        xmlP.up()
+                    }else {
+                        let xmlR = xmlP.ele('w:r')
+                        let xmlT = xmlR.ele({'w:t':check}).up();
+                        xmlR.up()
+                        xmlP.up()
+                    }
                     xmlTc.up()
+
+
 
             }// Method for create p in table
 

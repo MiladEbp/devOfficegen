@@ -4,29 +4,6 @@ let _ = require('lodash');
 
 describe('testLodash', function(){
 
-//     it('array in Lodash', function(done:any){
-//         let data = [
-//             {x:0 , y:0, value:'Milad'},
-//             {x:0 , y:1, value:'Ali'},
-//             {x:0 , y:2, value:''},
-//             {x:1 , y:0, value:''},
-//             {x:1 , y:1, value:''},
-//             {x:1 , y:2, value:''}
-//         ];// data
-// let find = _.isEmpty(data, 'x');
-//
-//
-//
-// //let counValue = value.length;
-//         console.log(find);
-//         done();
-//
-//         //let count = filter.length;
-//        // console.log(count+"\n");
-//        //  console.log(countValue);
-//        //  done();
-//
-//     });// End of IT
 
 
     it('split', function(done){
@@ -59,10 +36,8 @@ describe('testLodash', function(){
         ];
        // let  change= _.uniqBy(privatData, 'name');
 
-        console.log(change)
-        done();
-
-        //let data  = {}
 
     });
 });// describe
+
+

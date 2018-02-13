@@ -3,10 +3,17 @@ exports.__esModule = true;
 var xmlbuild = require("xmlbuilder");
 var _ = require('lodash');
 var createTableProperty = (function () {
-    function createTableProperty(col, row, data, next) {
-        this.createRow(col, row, data, function (result) {
-            next(result.end({ indent: ' ', newline: '\n', allowEmpty: false, spacebeforeslash: '' }));
-        });
+    function createTableProperty(col, row, data, flag, next) {
+        if (flag == 1) {
+            this.createRow(col, row, data, function (result) {
+                next(result.end({ pretty: true }));
+            });
+        }
+        else if (flag == 2) {
+            this.createRow(col, row, data, function (result) {
+                next(result.end({ indent: ' ', newline: '\n', allowEmpty: false, spacebeforeslash: '' }));
+            });
+        }
     }
     createTableProperty.prototype.createRow = function (col, row, data, next) {
         var i = 0;
