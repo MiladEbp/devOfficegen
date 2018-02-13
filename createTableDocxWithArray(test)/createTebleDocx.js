@@ -67,7 +67,7 @@ describe('DevOfficegen', function () {
                 var countRow = _.uniqBy(dataJson, 'x');
                 var col = countCol.length;
                 var row = countRow.length;
-                new objClass(col, row, dataJson, function (xmlBody) {
+                new objClass(col, row, dataJson, 2, function (xmlBody) {
                     var xmlTableProperty = xmlBody.split('?>');
                     var xmlTable = xmlTableProperty[1];
                     var newWordXml = xmlSectionOne + xmlTable + xmlSectionTow;
@@ -105,12 +105,12 @@ describe('DevOfficegen', function () {
             return createTableDocx;
         }());
         var data = [
-            { x: 0, y: 0, value: 'Milad' },
-            { x: 0, y: 1, value: '' },
-            { x: 0, y: 2, value: '' },
-            { x: 1, y: 0, value: '' },
-            { x: 1, y: 1, value: '' },
-            { x: 1, y: 2, value: 'Ali' }
+            { x: 0, y: 0, value: 'Milad', mergeRow: '' },
+            { x: 0, y: 1, value: '', mergeRow: 1 },
+            { x: 0, y: 2, value: '', mergeRow: '' },
+            { x: 1, y: 0, value: '', mergeRow: '' },
+            { x: 1, y: 1, value: '', mergeRow: '' },
+            { x: 1, y: 2, value: 'Ali', mergeRow: '' }
         ];
         var objClass = funcDevOfficegenTest_1.createTableProperty;
         var importData = [];
@@ -118,7 +118,6 @@ describe('DevOfficegen', function () {
         var officegenDev = new createTableDocx();
         var getPrivateDataObject = officegenDev.getPrivateData(importData, function (result) {
             console.log(result);
-            done();
         });
     });
 });

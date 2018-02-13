@@ -66,7 +66,7 @@ class createTableDocx{
             }// Function getPrivateData
 
 
-            splitXmlData(importData:any,dataXml:any, next:any){
+            splitXmlData(importData:any,dataXml:any,next:any){
                 let splitXmlData = dataXml.split('{');
                 let xmlSectionOne = splitXmlData[0];
                 let xmlSectionTwo = splitXmlData[1];
@@ -87,7 +87,7 @@ class createTableDocx{
                          let countRow = _.uniqBy(dataJson, 'x');
                          let col = countCol.length;
                          let row = countRow.length;
-                         new objClass(col, row , dataJson, function(xmlBody:any){
+                         new objClass(col, row , dataJson,2,function(xmlBody:any){
                             let xmlTableProperty = xmlBody.split('?>');
                             let xmlTable = xmlTableProperty[1];
                             let newWordXml = xmlSectionOne+xmlTable+xmlSectionTow;
@@ -149,14 +149,20 @@ class createTableDocx{
 
     /****  define data list of Property ****/
 
+
+
+
+
     let data = [
-        {x: 0, y: 0, value: 'Milad'},
-        {x: 0, y: 1, value: ''},
-        {x: 0, y: 2, value: ''},
-        {x: 1, y: 0, value: ''},
-        {x: 1, y: 1, value: ''},
-        {x: 1, y: 2, value: 'Ali'}
+        {x: 0, y: 0, value: 'Milad', mergeRow:''},
+        {x: 0, y: 1, value: '', mergeRow:1},
+        {x: 0, y: 2, value: '', mergeRow:''},
+        {x: 1, y: 0, value: '', mergeRow:''},
+        {x: 1, y: 1, value: '', mergeRow:''},
+        {x: 1, y: 2, value: 'Ali', mergeRow:''}
     ];// data
+
+
 
 
 
@@ -169,7 +175,7 @@ class createTableDocx{
     let officegenDev  = new createTableDocx();
     let getPrivateDataObject = officegenDev.getPrivateData(importData,function(result:any){
         console.log(result);
-        done();
+
     })
 
 
