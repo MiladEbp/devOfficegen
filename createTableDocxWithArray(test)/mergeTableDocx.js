@@ -11,40 +11,89 @@ describe('Merge Table', function () {
                     ]
                 }]
         };
-        function createTr(body, data, next) {
-            var tr = { 'w:tr': [] };
+        function createTr(_body, data) {
             var counterRow = _.uniqBy(data, 'x');
             var row = counterRow.length;
             for (var i = 0; i < row; i++) {
-                body['w:tbl'].push(tr);
+                _body['w:tbl'].push({ 'w:tr': [] });
             }
-            next(body);
+            return _body;
         }
-        function createTc(body, data, next) {
-            var tc = { 'w:tc': [] };
+        function createTc(_body, data) {
             var counterCol = _.uniqBy(data, 'y');
             var counterRow = _.uniqBy(data, 'x');
             var row = counterRow.length;
             var col = counterCol.length;
-            var tr = body['w:tbl'][1]['w:tr'];
-            var p = { 'w:p': [] };
-            for (var j = 1; j <= col; j++) {
-                body['w:tbl'][1]['w:tr'].push(tc);
+            for (var i = 1; i <= row; i++) {
+                for (var j = 0; j < col; j++) {
+                    _body['w:tbl'][i]['w:tr'].push({ 'w:tc': [{ 'w:tcPr': [{ 'w:tcW': '', attr: { 'w:w': 4657, 'w:type': 'dxa' } }] },] });
+                }
             }
-            next(body);
+            return _body;
+        }
+        function createP(_body, data) {
+            var counterCol = _.uniqBy(data, 'y');
+            var counterRow = _.uniqBy(data, 'x');
+            var row = counterRow.length;
+            var col = counterCol.length;
+            for (var i = 1; i <= row; i++) {
+                for (var j = 0; j < col; j++) {
+                    var checkValue = _.find(data, { x: i, y: j });
+                    var value = checkValue.value;
+                    if (value == '') {
+                        _body['w:tbl'][i]['w:tr'][j]['w:tc'].push({ 'w:p': [] });
+                    }
+                    else {
+                        _body['w:tbl'][i]['w:tr'][j]['w:tc'].push({ 'w:p': [{ 'w:r': [{ 'w:t': value }] }] });
+                    }
+                }
+            }
+            return _body;
+        }
+        function createMerge(_body, data) {
+            var counterCol = _.uniqBy(data, 'y');
+            var counterRow = _.uniqBy(data, 'x');
+            var row = counterRow.length;
+            var col = counterCol.length;
+            var start = [];
+            for (var i = 1; i <= row; i++) {
+                for (var j = 0; j < col; j++) {
+                    var checkMerge = _.find(data, { x: i, y: j });
+                    var rowX = checkMerge.mergeRow;
+                    var colY = checkMerge.mergeCol;
+                    if (rowX != '' && colY != '') {
+                        var findX = checkMerge.x;
+                        var findY = checkMerge.y;
+                        _body['w:tbl'][findX]['w:tr'][findY]['w:tc'][0]['w:tcPr'].push({ 'w:vMerge': '', attr: { 'w:val': 'restart' } });
+                        var a = _body;
+                    }
+                    else {
+                        var tcRemoveFind = _.find(data, { x: 1, y: colY });
+                        if (tcRemoveFind = true) {
+                            _.remove();
+                        }
+                    }
+                    var mergeCol = _.find(data, { x: 1, y: colY });
+                    var mergeRow = _.find(data, { x: rowX, y: 0 });
+                    var removeNewTc = _.find(data, { x: rowX, y: 1 });
+                }
+            }
+            return _body['w:tbl'][1]['w:tr'][0]['w:tc'][0]['w:tcPr'];
         }
         var data = [
-            { x: 0, y: 0, value: 'Milad', mergeRow: '' },
-            { x: 0, y: 1, value: '', mergeRow: 1 },
-            { x: 0, y: 2, value: '', mergeRow: '' },
-            { x: 1, y: 0, value: '', mergeRow: '' },
-            { x: 1, y: 1, value: '', mergeRow: '' },
-            { x: 1, y: 2, value: 'Ali', mergeRow: '' }
+            { x: 1, y: 0, value: 'Milad', mergeRow: '2', mergeCol: '1' },
+            { x: 1, y: 1, value: '', mergeRow: '', mergeCol: '' },
+            { x: 1, y: 2, value: '', mergeRow: '', mergeCol: '' },
+            { x: 2, y: 0, value: '', mergeRow: ' ', mergeCol: '' },
+            { x: 2, y: 1, value: '', mergeRow: '', mergeCol: '' },
+            { x: 2, y: 2, value: 'Ali', mergeRow: '', mergeCol: '' }
         ];
-        var objCreateTr = createTr(body, data, function (body) {
-            console.log(JSON.stringify(body));
-            done();
-        });
+        var objCreateTr = createTr(body, data);
+        var objCreateTc = createTc(objCreateTr, data);
+        var objCreateP = createP(objCreateTc, data);
+        var objCreateMerge = createMerge(objCreateP, data);
+        console.log(JSON.stringify(objCreateMerge));
+        done();
     });
 });
 //# sourceMappingURL=mergeTableDocx.js.map
