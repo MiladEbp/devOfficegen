@@ -1,7 +1,6 @@
 import {} from 'mocha';
-import {fail} from "assert";
-import {} from 'assert';
-import {createTableProperty} from '../test/funcDevOfficegenTest';
+import {fail} from 'assert';
+import {table} from './tabelAndMerge';
 let _ = require('lodash');
 import * as Archive from 'archiver';
 import {createWriteStream} from 'fs';
@@ -10,6 +9,9 @@ import {createWriteStream} from 'fs';
 
 describe('DevOfficegen', function (){
     it('createTableDocx', function(done){
+
+
+
 class createTableDocx{
         privatData:any  = [
             { name: '_rels\\.rels',
@@ -83,14 +85,11 @@ class createTableDocx{
                 /**** calling class createTableProperty *****/
                         let dataJson = importData[0];
                         let objClass = importData[1];
-                        let countCol = _.uniqBy(dataJson, 'y');
-                         let countRow = _.uniqBy(dataJson, 'x');
-                         let col = countCol.length;
-                         let row = countRow.length;
-                         new objClass(col, row , dataJson,2,function(xmlBody:any){
-                            let xmlTableProperty = xmlBody.split('?>');
-                            let xmlTable = xmlTableProperty[1];
-                            let newWordXml = xmlSectionOne+xmlTable+xmlSectionTow;
+                        let body     = importData[2];
+
+                          objClass.callingMethod(body,dataJson,function(stringBody:any){
+                            let stringTable  = stringBody;
+                            let newWordXml = xmlSectionOne+stringTable+xmlSectionTow;
 
                             /****** passing newWordXml to updatePrivateData ****/
                             officegenDev.updatePrivateData(newWordXml, function(updatePrivateData:any){
@@ -147,28 +146,37 @@ class createTableDocx{
 
         }// END Class Of  {createTableDocx}
 
+
+
+
+
+        let  body = {
+            'w:tbl':[{
+                'w:tblPr':[
+                    {'w:tblStyle':'', attr:{'w:val':"TableGrid"}}
+                ],
+
+            }]//w:tbl
+        };
+
     /****  define data list of Property ****/
 
-
-
-
-
     let data = [
-        {x: 0, y: 0, value: 'Milad', mergeRow:''},
-        {x: 0, y: 1, value: '', mergeRow:1},
-        {x: 0, y: 2, value: '', mergeRow:''},
-        {x: 1, y: 0, value: '', mergeRow:''},
-        {x: 1, y: 1, value: '', mergeRow:''},
-        {x: 1, y: 2, value: 'Ali', mergeRow:''}
+        {x: 1, y: 0, value: 'Milad',mergeRow:2, mergeCol:2},       //mergeRow:(x) ,,,, mergeCol:(y)
+        {x: 1, y: 1, value: '', mergeRow:'', mergeCol:''},
+        {x: 1, y: 2, value: '',mergeRow:'', mergeCol:''},
+        {x: 2, y: 0, value: '',mergeRow:'', mergeCol:''},
+        {x: 2, y: 1, value: '', mergeRow:'', mergeCol:''},
+        {x: 2, y: 2, value: 'Ali',mergeRow:'', mergeCol:''}
     ];// data
 
 
 
 
 
-    let objClass = createTableProperty;
+    let objClass =new table();
     let importData = [];
-    importData.push(data, objClass)
+    importData.push(data, objClass, body);
 
     /***  define objects of class  ***/
 

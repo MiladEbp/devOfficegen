@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-var funcDevOfficegenTest_1 = require("../test/funcDevOfficegenTest");
+var tabelAndMerge_1 = require("./tabelAndMerge");
 var _ = require('lodash');
 var Archive = require("archiver");
 var fs_1 = require("fs");
@@ -63,14 +63,10 @@ describe('DevOfficegen', function () {
             createTableDocx.prototype.injectionIntoXmlBody = function (importData, xmlSectionOne, xmlSectionTow, next) {
                 var dataJson = importData[0];
                 var objClass = importData[1];
-                var countCol = _.uniqBy(dataJson, 'y');
-                var countRow = _.uniqBy(dataJson, 'x');
-                var col = countCol.length;
-                var row = countRow.length;
-                new objClass(col, row, dataJson, 2, function (xmlBody) {
-                    var xmlTableProperty = xmlBody.split('?>');
-                    var xmlTable = xmlTableProperty[1];
-                    var newWordXml = xmlSectionOne + xmlTable + xmlSectionTow;
+                var body = importData[2];
+                objClass.callingMethod(body, dataJson, function (stringBody) {
+                    var stringTable = stringBody;
+                    var newWordXml = xmlSectionOne + stringTable + xmlSectionTow;
                     officegenDev.updatePrivateData(newWordXml, function (updatePrivateData) {
                         next(updatePrivateData);
                     });
@@ -104,17 +100,24 @@ describe('DevOfficegen', function () {
             };
             return createTableDocx;
         }());
+        var body = {
+            'w:tbl': [{
+                    'w:tblPr': [
+                        { 'w:tblStyle': '', attr: { 'w:val': "TableGrid" } }
+                    ]
+                }]
+        };
         var data = [
-            { x: 0, y: 0, value: 'Milad', mergeRow: '' },
-            { x: 0, y: 1, value: '', mergeRow: 1 },
-            { x: 0, y: 2, value: '', mergeRow: '' },
-            { x: 1, y: 0, value: '', mergeRow: '' },
-            { x: 1, y: 1, value: '', mergeRow: '' },
-            { x: 1, y: 2, value: 'Ali', mergeRow: '' }
+            { x: 1, y: 0, value: 'Milad', mergeRow: 2, mergeCol: 2 },
+            { x: 1, y: 1, value: '', mergeRow: '', mergeCol: '' },
+            { x: 1, y: 2, value: '', mergeRow: '', mergeCol: '' },
+            { x: 2, y: 0, value: '', mergeRow: '', mergeCol: '' },
+            { x: 2, y: 1, value: '', mergeRow: '', mergeCol: '' },
+            { x: 2, y: 2, value: 'Ali', mergeRow: '', mergeCol: '' }
         ];
-        var objClass = funcDevOfficegenTest_1.createTableProperty;
+        var objClass = new tabelAndMerge_1.table();
         var importData = [];
-        importData.push(data, objClass);
+        importData.push(data, objClass, body);
         var officegenDev = new createTableDocx();
         var getPrivateDataObject = officegenDev.getPrivateData(importData, function (result) {
             console.log(result);
